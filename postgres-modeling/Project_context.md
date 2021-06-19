@@ -8,8 +8,6 @@ The objective is to create a Postgres database with tables designed to optimize 
 as well as an ETL pipeline that transfers the data from the JSON logs into the database, such that the
 analytics team can run queries on it.
 
-The project involves defining fact and dimension tables for a star schema for a particular analytic focus, and writing an ETL pipeline that transfers data from files in two local directories into these tables in Postgres using Python and SQL.
-
 ## Schema for Song Play Analysis
 
 Using the song and log datasets, we'll create a star schema optimized for queries on song play analysis. This includes the following tables.
