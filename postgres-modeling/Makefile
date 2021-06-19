@@ -1,7 +1,10 @@
-.PHONY: run start-pg stop-pg
+.PHONY: tables data start-pg stop-pg dbrole db
 
-run:
+tables:
 	python create_tables.py
+
+data:
+	python etl.py
 
 # https://stackoverflow.com/questions/7975556/how-can-i-start-postgresql-server-on-mac-os-x
 

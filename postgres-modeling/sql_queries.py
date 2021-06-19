@@ -17,9 +17,9 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 songplay_table_create = """
 CREATE TABLE IF NOT EXISTS songplays (
     songplay_id VARCHAR,
-    start_time INT,
-    user_id VARCHAR,
-    level VARCHAR(20),
+    start_time TIMESTAMP,
+    user_id INT,
+    level VARCHAR(10),
     song_id VARCHAR,
     artist_id VARCHAR,
     session_id INT,
@@ -30,11 +30,11 @@ CREATE TABLE IF NOT EXISTS songplays (
 
 user_table_create = """
 CREATE TABLE IF NOT EXISTS users (
-    user_id VARCHAR,
+    user_id INT,
     first_name VARCHAR,
     last_name VARCHAR,
-    gender VARCHAR,
-    level VARCHAR
+    gender VARCHAR(10),
+    level VARCHAR(10)
 )
 """
 
@@ -58,9 +58,14 @@ CREATE TABLE IF NOT EXISTS artists (
 )
 """
 
+# https://stackoverflow.com/questions/11799160/postgresql-field-type-for-unix-timestamp/22972434
+# BIGINT is the best choice for storing a large unix timestamp,
+# but it might be best to store the timestamp in the ISO 8601 standard format,
+# represented in PostgreSQL as the TIMESTAMP data type
+
 time_table_create = """
 CREATE TABLE IF NOT EXISTS time (
-    start_time INT,
+    start_time TIMESTAMP,
     hour INT,
     day INT,
     week INT,
@@ -73,9 +78,15 @@ CREATE TABLE IF NOT EXISTS time (
 # INSERT RECORDS
 
 songplay_table_insert = """
+INSERT INTO songplays (
+    songplay_id, start_time, user_id, level, song_id, artist_id,
+    session_id, location, user_agent
+) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 user_table_insert = """
+INSERT INTO users (user_id, first_name, last_name, gender, level)
+VALUES (%s, %s, %s, %s, %s)
 """
 
 song_table_insert = """
@@ -84,15 +95,25 @@ VALUES (%s, %s, %s, %s, %s)
 """
 
 artist_table_insert = """
+INSERT INTO artists (artist_id, name, location, latitude, longitude)
+VALUES (%s, %s, %s, %s, %s)
 """
 
 
 time_table_insert = """
+INSERT INTO time (start_time, hour, day, week, month, year, weekday)
+VALUES (%s, %s, %s, %s, %s, %s, %s)
 """
 
 # FIND SONGS
 
 song_select = """
+SELECT songs.song_id, songs.artist_id
+FROM songs
+LEFT JOIN artists ON songs.artist_id = artists.artist_id
+WHERE songs.title = %s
+  AND artists.name = %s
+  AND songs.duration = %s
 """
 
 # QUERY LISTS
