@@ -1,3 +1,4 @@
 jupyterlab
 psycopg2
 pandas
+ipython-sql

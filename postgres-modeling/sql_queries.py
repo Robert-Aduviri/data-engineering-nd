@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS songs (
     song_id VARCHAR,
     title VARCHAR,
     artist_id VARCHAR,
-    year VARCHAR,
-    duration VARCHAR
+    year INT,
+    duration DECIMAL
 )
 """
 
@@ -79,6 +79,8 @@ user_table_insert = """
 """
 
 song_table_insert = """
+INSERT INTO songs (song_id, title, artist_id, year, duration)
+VALUES (%s, %s, %s, %s, %s)
 """
 
 artist_table_insert = """
