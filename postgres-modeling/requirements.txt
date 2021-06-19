@@ -1,0 +1,3 @@
+jupyterlab
+psycopg2
+pandas

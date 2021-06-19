@@ -1,0 +1,113 @@
+{
+
+    // ======================== Python path ========================
+    // in Linux / macOS
+    "python.pythonPath": "${workspaceFolder}/.venv/bin/python",
+    // Additional import search resolution paths
+    // avoid name resolving (importing) problems inside project
+    // this is to help Pylance resolve paths
+    "python.analysis.extraPaths": [
+        // in Linux / macOS
+        // "${workspaceFolder}/",
+        // "${workspaceFolder}/.venv/lib/python3.8/site-packages/",
+    ],
+
+    // minimal log level to show on Output window
+    "python.analysis.logLevel": "Trace",
+
+    // List of paths to libraries and the like that need to be imported by auto complete engine.
+    // E.g. when using Google App SDK, the paths are not in system path, hence need to be added into this list.
+    "python.autoComplete.extraPaths": [
+        // in Linux / macOS
+        // "${workspaceFolder}/",
+        // "${workspaceFolder}/.venv/lib/python3.8/site-packages/",
+    ],
+
+    // ======================== Static type checker ========================
+    // TODO activate a more strict type checker
+    // https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance#settings-and-customization:~:text=Settings%20and%20Customization
+    // "python.analysis.typeCheckingMode": "basic",
+    // "python.analysis.typeCheckingMode": "off",
+    // =====================================================================
+
+
+    // ======================== Refactoring - Sort imports ========================
+    // https://gist.github.com/cb109/47496649640c9c5f4287b06db7a7c197
+    // in Linux / macOS
+    "python.sortImports.path": "${workspaceFolder}/.venv/bin/isort",
+    // ===========================================================================
+    "python.sortImports.args": [
+        "-sp isort.cfg"
+    ],
+
+    // ======================== Linter ========================
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    // disable default option, which is pylint
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    // in Linux / macOS
+    // "python.linting.flake8Path": "${workspaceFolder}/.venv/bin/flake8",
+    // E121, E123, E126, E226, E24, E704, E303
+    // E501 line too long 79 characteres
+    "python.linting.flake8Args": [
+        // "--ignore=E24,W504,E203,W503",
+        "--max-line-length=88",
+        "--extend-ignore=E203",
+        "--verbose",
+    ],
+    // ========================================================
+
+    // ======================== Code Formatter ========================
+    "python.formatting.provider": "black",
+    // in Linux / macOS
+    // "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
+    // "python.formatting.blackArgs": [
+    //     "--line-length=88"
+    // ],
+    // ================================================================
+
+    "[python]": {
+        "editor.rulers": [
+            // Black recommends
+            88,
+        ],
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+
+        // Code Formatter
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+
+        // activate it but consider how it would affect when running django as container
+        // "files.autoSave": "afterDelay",
+        // "files.autoSaveDelay": 5000,
+
+        // isort
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+
+    "[dockercompose]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+    },
+
+    "files.exclude": {
+        "**/.venv": true,
+        "**/venv": true,
+        "**/__pycache__": true,
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+
+    "search.exclude": {
+        "**/.venv": true,
+        "**/venv": true,
+        "**/__pycache__": true,
+    },
+}
