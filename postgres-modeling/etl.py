@@ -1,5 +1,6 @@
 import glob
 import os
+from typing import Callable
 
 import pandas as pd
 import psycopg2
@@ -7,7 +8,15 @@ import psycopg2
 import sql_queries
 
 
-def process_song_file(cur, filepath):
+def process_song_file(cur, filepath: str) -> None:
+    """
+    Reads the song json file and inserts its data into the songs and artists tables
+    in Postgres
+
+    Arguments:
+        cur: the cursor object
+        filepath: log data file path
+    """
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -36,7 +45,15 @@ def process_song_file(cur, filepath):
         cur.execute(sql_queries.artist_table_insert, artist_record)
 
 
-def process_log_file(cur, filepath):
+def process_log_file(cur, filepath: str) -> None:
+    """
+    Reads the log json file and inserts its data into the time, users and
+    songplays tables in Postgres
+
+    Arguments:
+        cur: the cursor object
+        filepath: log data file path
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -73,7 +90,7 @@ def process_log_file(cur, filepath):
         cur.execute(sql_queries.user_table_insert, row)
 
     # insert songplay records
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
 
         # get songid and artistid from song and artist tables
         cur.execute(sql_queries.song_select, (row.song, row.artist, row.length))
@@ -86,7 +103,6 @@ def process_log_file(cur, filepath):
 
         # insert songplay record
         songplay_data = (
-            index,
             row.ts,
             row.userId,
             row.level,
@@ -99,7 +115,18 @@ def process_log_file(cur, filepath):
         cur.execute(sql_queries.songplay_table_insert, songplay_data)
 
 
-def process_data(cur, conn, filepath, func):
+def process_data(cur, conn, filepath: str, func: Callable) -> None:
+    """
+    Processes all the json files located in the specified `filepath` by applying
+    the injected processing function `func` to each file, inserting the data into
+    the Postgres database, using the provided DB connection `conn` and cursor `cur`
+
+    Arguments:
+        cur: the cursor object
+        conn: connection to the database
+        filepath: log data or song data file path
+        func: function that transforms the data and inserts it into the database
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
